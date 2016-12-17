@@ -1,12 +1,4 @@
-// Simple NeoPixel test.  Lights just a few pixels at a time so a
-// long strip can safely be powered from Arduino 5V pin.  Arduino
-// may nonetheless hiccup when LEDs are first connected and not
-// accept code.  So upload code first, unplug USB, connect pixels
-// to GND FIRST, then +5V and digital pin 6, then re-plug USB.
-// A working strip will show a few pixels moving down the line,
-// cycling between red, green and blue.  If you get no response,
-// might be connected to wrong end of strip -- look for the data
-// direction arrows printed on the strip.
+// Accepts serial commands to change the pattern / colors of the animation
 
 #include <Adafruit_NeoPixel.h>
 
@@ -14,7 +6,7 @@
 #define N_LEDS 450 // 5 meter reel @ 30 LEDs/m = 150
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
-char input = '1';   // for incoming serial data
+String input;   // for incoming serial data
 bool run = true;
 
 void setup() {
@@ -23,29 +15,48 @@ void setup() {
 }
 
 void loop() {
-  char last_input;
-  for(uint16_t offset=0; offset<strip.numPixels(); offset++) {
-    if (run) {
-      // colors are RR GG BB
-      multichase(offset, 0xFF0000, 0xFFFFFF, 0x00FF00);
-    } else {
-      dark();
-    }
-
-    last_input = readChar();
-    if (last_input == '0') {
-      run = false;
-    } else if (last_input == '1') {
-      run = true;
-    }
+  var wait = 25;
+  
+  if (run) {
+    // colors are RR GG BB
+    multichase(false, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
+    multichase(true, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
+    colorWipe(wait, 0xFF0000);
+    colorWipe(wait, 0xFFFFFF);
+    colorWipe(wait, 0x00FF00);
+  } else {
+    dark(wait);
   }
+
+  processInput(readStr());
 }
 
-static char readChar() {
+static void processInput(String in) {
+  switch (in.charAt(0)) {
+    case '0':
+      run = false;
+      break;
+    case '1':
+      run = true;
+      break;
+    case 'A':
+      setAnimation(in);
+      break;
+    case 'C':
+      addColor(in);
+      break;
+    case 'R':
+      resetColors();
+      break;
+  }
+}
+  
+
+static String readStr() {
   // send data only when you receive data:
-  if (Serial.available() > 0) {
+  if (Serial && Serial.available() > 0) {
     // read the incoming char:
-    input = (char) Serial.read();
+    input = Serial.readStringUntil('\n');
 
     // say what you got:
 //    Serial.print("I received: ");
@@ -53,19 +64,68 @@ static char readChar() {
 
     return input;
   }
-  return NULL;
+  return "";
 }
 
-static void chase(uint32_t c) {
+static void setAnimation(String in) {
+  // stub for switching animations
+}
+
+static void addColor(String in) {
+  // stub for adding colors
+}
+
+static void resetColors() {
+  // stub for resetting colors
+}
+
+// turn off all pixels
+static void dark(uint16_t wait) {
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, 0); // Erase pixel
+  }
+  strip.show();
+  delay(wait);
+}
+
+// single bar of color 4 pixels long runs around the strip
+static void chase(uint16_t wait, uint32_t c) {
   for(uint16_t i=0; i<strip.numPixels()+4; i++) {
+    if (run) {
       strip.setPixelColor(i  , c); // Draw new pixel
       strip.setPixelColor(i-4, 0); // Erase pixel a few steps back
       strip.show();
-      delay(25);
+      delay(wait);
+    }
+    
+    processInput(readStr());
   }
 }
 
-static void multichase(uint16_t offset, uint32_t c1, uint32_t c2, uint32_t c3) {
+// continous bars of colors run around the strip
+static void multichase(bool reverse, uint16_t wait, uint32_t c1, uint32_t c2, uint32_t c3) {
+  if (reverse) {
+    // reverse
+    for(uint16_t offset=strip.numPixels(); offset>=0; offset--) {
+      if (run) {
+        multichaseFrame(offset, wait, c1, c2, c3);
+      }
+   
+      processInput(readStr());
+    }
+  } else {
+    // forward
+    for(uint16_t offset=0; offset<strip.numPixels(); offset++) {
+      if (run) {
+        multichaseFrame(offset, wait, c1, c2, c3);
+      }
+   
+      processInput(readStr());
+    }
+  }
+}
+
+static void multichaseFrame(uint16_t offset, uint16_t wait, uint32_t c1, uint32_t c2, uint32_t c3) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
     switch ((i+offset) % 24) {
       case 1:
@@ -93,14 +153,19 @@ static void multichase(uint16_t offset, uint32_t c1, uint32_t c2, uint32_t c3) {
   }
     
   strip.show();
-  delay(25);
+  delay(wait);
 }
 
-static void dark() {
+// Fill the dots one after the other with a color
+void colorWipe(uint16_t wait, uint32_t c) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
-    strip.setPixelColor(i, 0); // Erase pixel
+    if (run) {
+      strip.setPixelColor(i, c);
+      strip.show();
+      delay(wait);
+    }
+   
+    processInput(readStr());
   }
-  strip.show();
-  delay(25);
+  dark(wait); // turn off animation pixels
 }
-
