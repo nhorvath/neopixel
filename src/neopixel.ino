@@ -34,19 +34,28 @@ void loop() {
 static void processInput(String in) {
   switch (in.charAt(0)) {
     case '0':
+      Serial.println("Stopping animations");
       run = false;
       break;
     case '1':
+      Serial.println("Starting animations");
       run = true;
       break;
     case 'A':
+      Serial.print("Set animation sequence to: ");
+      Serial.println(in);
       setAnimation(in);
       break;
     case 'C':
+      Serial.print("Add color to color sequence: ");
+      Serial.println(in);
       addColor(in);
       break;
     case 'R':
+      Serial.println("Reset color sequence");
       resetColors();
+      break;
+    default:
       break;
   }
 }
@@ -59,8 +68,8 @@ static String readStr() {
     input = Serial.readStringUntil('\n');
 
     // say what you got:
-//    Serial.print("I received: ");
-//    Serial.println(input);
+    Serial.print("I received: ");
+    Serial.println(input);
 
     return input;
   }
