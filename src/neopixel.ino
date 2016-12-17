@@ -22,9 +22,9 @@ void loop() {
     // colors are RR GG BB
     multichase(false, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
     multichase(true, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
-    colorWipe(wait/2, 0xFF0000);
-    colorWipe(wait/2, 0xFFFFFF);
-    colorWipe(wait/2, 0x00FF00);
+    colorFill(wait/2, 0xFF0000);
+    colorFill(wait/2, 0xFFFFFF);
+    colorFill(wait/2, 0x00FF00);
   } else {
     dark(wait);
   }
@@ -123,9 +123,13 @@ static void chase(uint16_t wait, uint32_t c) {
 
 // continous bars of colors run around the strip
 static void multichase(bool reverse, uint16_t wait, uint32_t c1, uint32_t c2, uint32_t c3) {
+  int width = 4;
+  int numColors = 3;
+  int repeat = 10;
+  int maxOffset = width * numColors*2 * repeat;
   if (reverse) {
     // reverse
-    for(int offset=strip.numPixels(); offset>=0; offset--) {
+    for(int offset=maxOffset; offset>=0; offset--) {
       if (run) {
         multichaseFrame(offset, wait, c1, c2, c3);
       }
@@ -134,7 +138,7 @@ static void multichase(bool reverse, uint16_t wait, uint32_t c1, uint32_t c2, ui
     }
   } else {
     // forward
-    for(int offset=0; offset<strip.numPixels(); offset++) {
+    for(int offset=0; offset<maxOffset; offset++) {
       if (run) {
         multichaseFrame(offset, wait, c1, c2, c3);
       }
@@ -186,5 +190,20 @@ void colorWipe(uint16_t wait, uint32_t c) {
    
     processInput(readStr());
   }
-  dark(wait); // turn off animation pixels
+}
+
+// Fill the dots one after the other with a color from both sides
+void colorFill(uint16_t wait, uint32_t c) {
+  int numPixels = strip.numPixels();
+  int halfway = numPixels/2;
+  for(int i=0; i<=halfway; i++) {
+    if (run) {
+      strip.setPixelColor(i, c);
+      strip.setPixelColor(numPixels-i, c)
+      strip.show();
+      delay(wait);
+    }
+   
+    processInput(readStr());
+  }
 }
