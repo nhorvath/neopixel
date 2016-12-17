@@ -199,7 +199,7 @@ void colorFill(uint16_t wait, uint32_t c) {
   for(int i=0; i<=halfway; i++) {
     if (run) {
       strip.setPixelColor(i, c);
-      strip.setPixelColor(numPixels-i, c)
+      strip.setPixelColor(numPixels-i, c);
       strip.show();
       delay(wait);
     }
