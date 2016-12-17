@@ -8,6 +8,7 @@
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 String input;   // for incoming serial data
 bool run = true;
+bool debug = false;
 
 void setup() {
   Serial.begin(9600);
@@ -21,9 +22,9 @@ void loop() {
     // colors are RR GG BB
     multichase(false, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
     multichase(true, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
-    colorWipe(wait, 0xFF0000);
-    colorWipe(wait, 0xFFFFFF);
-    colorWipe(wait, 0x00FF00);
+    colorWipe(wait/2, 0xFF0000);
+    colorWipe(wait/2, 0xFFFFFF);
+    colorWipe(wait/2, 0x00FF00);
   } else {
     dark(wait);
   }
@@ -55,7 +56,15 @@ static void processInput(String in) {
       Serial.println("Reset color sequence");
       resetColors();
       break;
+    case 'D':
+      Serial.println("Toggle debug");
+      debug = !debug;
+      break;
     default:
+      if (in != "") {
+        Serial.print("Unsupported command: ");
+        Serial.println(in);
+      }
       break;
   }
 }
@@ -67,10 +76,11 @@ static String readStr() {
     // read the incoming char:
     input = Serial.readStringUntil('\n');
 
-    // say what you got:
-    Serial.print("I received: ");
-    Serial.println(input);
-
+    if (debug) {
+      // say what you got:
+      Serial.print("I received: ");
+      Serial.println(input);
+    }
     return input;
   }
   return "";
@@ -90,7 +100,7 @@ static void resetColors() {
 
 // turn off all pixels
 static void dark(uint16_t wait) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
+  for(int i=0; i<strip.numPixels(); i++) {
     strip.setPixelColor(i, 0); // Erase pixel
   }
   strip.show();
@@ -99,7 +109,7 @@ static void dark(uint16_t wait) {
 
 // single bar of color 4 pixels long runs around the strip
 static void chase(uint16_t wait, uint32_t c) {
-  for(uint16_t i=0; i<strip.numPixels()+4; i++) {
+  for(int i=0; i<strip.numPixels()+4; i++) {
     if (run) {
       strip.setPixelColor(i  , c); // Draw new pixel
       strip.setPixelColor(i-4, 0); // Erase pixel a few steps back
@@ -115,7 +125,7 @@ static void chase(uint16_t wait, uint32_t c) {
 static void multichase(bool reverse, uint16_t wait, uint32_t c1, uint32_t c2, uint32_t c3) {
   if (reverse) {
     // reverse
-    for(uint16_t offset=strip.numPixels(); offset>=0; offset--) {
+    for(int offset=strip.numPixels(); offset>=0; offset--) {
       if (run) {
         multichaseFrame(offset, wait, c1, c2, c3);
       }
@@ -124,7 +134,7 @@ static void multichase(bool reverse, uint16_t wait, uint32_t c1, uint32_t c2, ui
     }
   } else {
     // forward
-    for(uint16_t offset=0; offset<strip.numPixels(); offset++) {
+    for(int offset=0; offset<strip.numPixels(); offset++) {
       if (run) {
         multichaseFrame(offset, wait, c1, c2, c3);
       }
@@ -134,8 +144,8 @@ static void multichase(bool reverse, uint16_t wait, uint32_t c1, uint32_t c2, ui
   }
 }
 
-static void multichaseFrame(uint16_t offset, uint16_t wait, uint32_t c1, uint32_t c2, uint32_t c3) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
+static void multichaseFrame(int offset, uint16_t wait, uint32_t c1, uint32_t c2, uint32_t c3) {
+  for(int i=0; i<strip.numPixels(); i++) {
     switch ((i+offset) % 24) {
       case 1:
       case 2:
@@ -167,7 +177,7 @@ static void multichaseFrame(uint16_t offset, uint16_t wait, uint32_t c1, uint32_
 
 // Fill the dots one after the other with a color
 void colorWipe(uint16_t wait, uint32_t c) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
+  for(int i=0; i<strip.numPixels(); i++) {
     if (run) {
       strip.setPixelColor(i, c);
       strip.show();

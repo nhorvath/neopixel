@@ -11,4 +11,6 @@ fi
 
 $DIR/neopixel_init.sh $DEV
 
-echo -n "$1" > $DEV
+echo "$1" > $DEV
+#send extra line to clear buffers
+echo "" > $DEV
