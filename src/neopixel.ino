@@ -15,7 +15,7 @@ void setup() {
 }
 
 void loop() {
-  var wait = 25;
+  uint16_t wait = 25;
   
   if (run) {
     // colors are RR GG BB
