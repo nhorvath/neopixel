@@ -23,7 +23,6 @@ void loop() {
     multichase(false, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
     multichase(true, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
     colorFill(wait/2, 0xFF0000);
-    colorFill(wait/2, 0xFFFFFF);
     colorFill(wait/2, 0x00FF00);
   } else {
     dark(wait);
