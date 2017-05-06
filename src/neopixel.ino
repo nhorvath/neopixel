@@ -4,6 +4,7 @@
 
 #define PIN    6
 #define N_LEDS 450 // 5 meter reel @ 30 LEDs/m = 150
+#define PRESET 2; // 0 = xmas, 1 = 4th of july, 2 = mothers day
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 String input;   // for incoming serial data
@@ -18,12 +19,31 @@ void setup() {
 void loop() {
   uint16_t wait = 25;
   
-  if (run) {
     // colors are RR GG BB
-    multichase(false, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
-    multichase(true, wait, 0xFF0000, 0xFFFFFF, 0x00FF00);
-    colorFill(wait/2, 0xFF0000);
-    colorFill(wait/2, 0x00FF00);
+  uint32_t RED = 0xFF0000;
+  uint32_t GREEN = 0x00FF00;
+  uint32_t BLUE = 0x0000FF;
+  uint32_t WHITE = 0xFFFFFF;
+  uint32_t PINK = 0xFFAAAA;
+  uint32_t PURPLE = 0xFF00FF;
+  
+  if (run) {
+    if (PRESET == 0) { // xmas
+      multichase(false, wait, RED, WHITE, GREEN);
+      multichase(true, wait, RED, WHITE, GREEN);
+      colorFill(wait/2, RED);
+      colorFill(wait/2, GREEN);
+    } else if (PRESET == 1) { // 4th of july
+      multichase(false, wait, RED, WHITE, BLUE);
+      multichase(true, wait, RED, WHITE, BLUE);
+      colorFill(wait/2, RED);
+      colorFill(wait/2, BLUE);
+    } else if (PRESET == 2) { // mother's day
+      multichase(false, wait, PINK, WHITE, PURPLE);
+      multichase(true, wait, PINK, WHITE, PURPLE);
+      colorFill(wait/2, PINK);
+      colorFill(wait/2, PURPLE);
+    }
   } else {
     dark(wait);
   }
