@@ -4,12 +4,12 @@
 
 #define PIN    6
 #define N_LEDS 450 // 5 meter reel @ 30 LEDs/m = 150
-#define PRESET 2; // 0 = xmas, 1 = 4th of july, 2 = mothers day
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 String input;   // for incoming serial data
 bool run = true;
 bool debug = false;
+int PRESET = 2; // 0 = xmas, 1 = 4th of july, 2 = mothers day
 
 void setup() {
   Serial.begin(9600);
