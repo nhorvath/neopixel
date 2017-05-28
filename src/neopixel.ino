@@ -9,7 +9,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 String input;   // for incoming serial data
 bool run = true;
 bool debug = false;
-int PRESET = 2; // 0 = xmas, 1 = 4th of july, 2 = mothers day
+int PRESET = 1; // 0 = xmas, 1 = 4th of july, 2 = mothers day
 
 void setup() {
   Serial.begin(9600);
