@@ -9,7 +9,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 String input;   // for incoming serial data
 bool run = true;
 bool debug = false;
-int PRESET = 1; // 0 = xmas, 1 = 4th of july, 2 = mothers day
+int PRESET = 3; // 0 = xmas, 1 = 4th of july, 2 = mothers day, 3 = spring
 
 void setup() {
   Serial.begin(9600);
@@ -26,6 +26,7 @@ void loop() {
   uint32_t WHITE = 0xFFFFFF;
   uint32_t PINK = 0xFFAAAA;
   uint32_t PURPLE = 0xFF00FF;
+  uint32_t YELLOW = 0x00FFFF;
   
   if (run) {
     if (PRESET == 0) { // xmas
@@ -42,6 +43,12 @@ void loop() {
       multichase(false, wait, PINK, WHITE, PURPLE);
       multichase(true, wait, PINK, WHITE, PURPLE);
       colorFill(wait/2, PINK);
+      colorFill(wait/2, PURPLE);
+    } else if (PRESET == 3) { // spring
+      multichase(false, wait, PINK, YELLOW, PURPLE);
+      multichase(true, wait, PINK, YELLOW, PURPLE);
+      colorFill(wait/2, PINK);
+      colorFill(wait/2, YELLOW);
       colorFill(wait/2, PURPLE);
     }
   } else {
