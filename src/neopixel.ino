@@ -26,7 +26,7 @@ void loop() {
   uint32_t WHITE = 0xFFFFFF;
   uint32_t PINK = 0xFFAAAA;
   uint32_t PURPLE = 0xFF00FF;
-  uint32_t YELLOW = 0x00FFFF;
+  uint32_t TEAL = 0x00FFFF;
   
   if (run) {
     if (PRESET == 0) { // xmas
@@ -45,10 +45,10 @@ void loop() {
       colorFill(wait/2, PINK);
       colorFill(wait/2, PURPLE);
     } else if (PRESET == 3) { // spring
-      multichase(false, wait, PINK, YELLOW, PURPLE);
-      multichase(true, wait, PINK, YELLOW, PURPLE);
+      multichase(false, wait, PINK, TEAL, PURPLE);
+      multichase(true, wait, PINK, TEAL, PURPLE);
       colorFill(wait/2, PINK);
-      colorFill(wait/2, YELLOW);
+      colorFill(wait/2, TEAL);
       colorFill(wait/2, PURPLE);
     }
   } else {
