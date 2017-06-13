@@ -10,6 +10,15 @@ String input;   // for incoming serial data
 bool run = true;
 bool debug = false;
 int PRESET = 3; // 0 = xmas, 1 = 4th of july, 2 = mothers day, 3 = spring
+  
+// colors are RR GG BB
+uint32_t RED = 0xFF0000;
+uint32_t GREEN = 0x00FF00;
+uint32_t BLUE = 0x0000FF;
+uint32_t WHITE = 0xFFFFFF;
+uint32_t PINK = 0xFFAAAA;
+uint32_t PURPLE = 0xFF00FF;
+uint32_t TEAL = 0x00FFFF;
 
 void setup() {
   Serial.begin(9600);
@@ -18,15 +27,6 @@ void setup() {
 
 void loop() {
   uint16_t wait = 25;
-  
-    // colors are RR GG BB
-  uint32_t RED = 0xFF0000;
-  uint32_t GREEN = 0x00FF00;
-  uint32_t BLUE = 0x0000FF;
-  uint32_t WHITE = 0xFFFFFF;
-  uint32_t PINK = 0xFFAAAA;
-  uint32_t PURPLE = 0xFF00FF;
-  uint32_t TEAL = 0x00FFFF;
   
   if (run) {
     if (PRESET == 0) { // xmas
@@ -68,10 +68,10 @@ static void processInput(String in) {
       Serial.println("Starting animations");
       run = true;
       break;
-    case 'A':
-      Serial.print("Set animation sequence to: ");
-      Serial.println(in);
-      setAnimation(in);
+    case 'P':
+      Serial.print("Set preset sequence to: ");
+      Serial.println(in.substring(1).toInt());
+      setPreset(in.substring(1).toInt());
       break;
     case 'C':
       Serial.print("Add color to color sequence: ");
@@ -112,8 +112,8 @@ static String readStr() {
   return "";
 }
 
-static void setAnimation(String in) {
-  // stub for switching animations
+static void setPreset(int in) {
+  PRESET = in;
 }
 
 static void addColor(String in) {
