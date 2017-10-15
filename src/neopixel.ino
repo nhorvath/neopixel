@@ -17,8 +17,11 @@ uint32_t GREEN = 0x00FF00;
 uint32_t BLUE = 0x0000FF;
 uint32_t WHITE = 0xFFFFFF;
 uint32_t PINK = 0xFFAAAA;
-uint32_t PURPLE = 0xFF00FF;
+uint32_t MAGENTA = 0xFF00FF;
+uint32_t PURPLE = 0x00AAFF;
 uint32_t TEAL = 0x00FFFF;
+uint32_t ORANGE = 0xFF9D00;
+uint32_t YELLOW = 0xFFFF00;
 
 void setup() {
   Serial.begin(9600);
@@ -50,6 +53,10 @@ void loop() {
       colorFill(wait/2, PINK);
       colorFill(wait/2, TEAL);
       colorFill(wait/2, PURPLE);
+    } else if (PRESET == 4) { // halloween
+      multichase(false, wait, ORANGE, YELLOW, PURPLE);
+      multichase(true, wait, ORANGE, YELLOW, PURPLE);
+      colorFill(wait/2, ORANGE);
     }
   } else {
     dark(wait);
