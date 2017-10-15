@@ -18,7 +18,7 @@ uint32_t BLUE = 0x0000FF;
 uint32_t WHITE = 0xFFFFFF;
 uint32_t PINK = 0xFFAAAA;
 uint32_t MAGENTA = 0xFF00FF;
-uint32_t PURPLE = 0x00AAFF;
+uint32_t PURPLE = 0x00DDFF;
 uint32_t TEAL = 0x00FFFF;
 uint32_t ORANGE = 0xFF9D00;
 uint32_t YELLOW = 0xFFFF00;
@@ -43,19 +43,19 @@ void loop() {
       colorFill(wait/2, RED);
       colorFill(wait/2, BLUE);
     } else if (PRESET == 2) { // mother's day
-      multichase(false, wait, PINK, WHITE, PURPLE);
-      multichase(true, wait, PINK, WHITE, PURPLE);
+      multichase(false, wait, PINK, WHITE, MAGENTA);
+      multichase(true, wait, PINK, WHITE, MAGENTA);
       colorFill(wait/2, PINK);
-      colorFill(wait/2, PURPLE);
+      colorFill(wait/2, MAGENTA);
     } else if (PRESET == 3) { // spring
-      multichase(false, wait, PINK, TEAL, PURPLE);
-      multichase(true, wait, PINK, TEAL, PURPLE);
+      multichase(false, wait, PINK, TEAL, MAGENTA);
+      multichase(true, wait, PINK, TEAL, MAGENTA);
       colorFill(wait/2, PINK);
       colorFill(wait/2, TEAL);
       colorFill(wait/2, PURPLE);
     } else if (PRESET == 4) { // halloween
-      multichase(false, wait, ORANGE, YELLOW, PURPLE);
-      multichase(true, wait, ORANGE, YELLOW, PURPLE);
+      multichase(false, wait, ORANGE, ORANGE, ORANGE);
+      multichase(true, wait, ORANGE, ORANGE, ORANGE);
       colorFill(wait/2, ORANGE);
     }
   } else {
