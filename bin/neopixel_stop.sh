@@ -3,7 +3,7 @@
 if [ $# -eq 1 ] ; then
   DEV=$1
 else
-  DEV=/dev/ttyUSB0
+  DEV=`ls /dev/ttyUSB[0-9] | head -1`
 fi
 
 TAIL_PROC=`ps aux | grep -v grep | grep "tail -f $DEV"`

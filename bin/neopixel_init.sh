@@ -4,7 +4,7 @@ LOGFILE=/var/log/neopixel.log
 if [ $# -eq 1 ] ; then
   DEV=$1
 else
-  DEV=/dev/ttyUSB0
+  DEV=`ls /dev/ttyUSB[0-9] | head -1`
 fi
 
 stty -F $DEV cs8 9600 ignbrk -brkint -icrnl -imaxbel -opost -onlcr -isig -icanon -iexten -echo -echoe -echok -echoctl -echoke noflsh -ixon -crtscts
