@@ -9,7 +9,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(N_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 String input;   // for incoming serial data
 bool run = true;
 bool debug = false;
-int PRESET = 3; // 0 = xmas, 1 = 4th of july, 2 = mothers day, 3 = spring
+int PRESET = 0; // 0 = xmas, 1 = 4th of july, 2 = mothers day, 3 = spring
   
 // colors are RR GG BB
 uint32_t RED = 0xFF0000;

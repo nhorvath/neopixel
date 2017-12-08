@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEV=`ls /dev/ttyUSB[0-9] | head -1`
+DEV=`ls /dev/ttyUSB[0-9]* | head -1`
 DIR=`dirname $0`
 
 if [ $# -ne 1 ] ; then
